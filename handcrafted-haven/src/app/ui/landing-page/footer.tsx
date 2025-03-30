@@ -1,7 +1,7 @@
 import styles from "./Header_Footer.module.css";
 import {
-  FaFacebookF,
-  FaLinkedinIn,
+  FaFacebook,
+  FaLinkedin,
   FaYoutube,
   FaInstagram,
 } from "react-icons/fa";
@@ -20,8 +20,8 @@ export default function Footer() {
             <p>© {year} Handcrafted Haven. All rights reserved.</p>
           </div>
           <div className={styles.socialMediaIcons}>
-            <FaFacebookF />
-            <FaLinkedinIn />
+            <FaFacebook />
+            <FaLinkedin />
             <FaYoutube />
             <FaInstagram />
           </div>
