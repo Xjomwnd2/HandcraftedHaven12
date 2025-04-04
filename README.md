@@ -6,6 +6,7 @@ Team 12's Group Repo for WDD430 Term 2 2025.
 - Shayla Foley
 - Boluwatife Adebiyi Omotoyinbo
 - Ezequiel Rindello
+- Joel Ndiba Mwaura
 
 ## Technology
 - Front-End: HTML, CSS, JavaScript, Next.js
