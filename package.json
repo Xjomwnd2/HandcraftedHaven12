@@ -1,11 +1,18 @@
 {
-  "name": "handcraftedhaven12",
+  "name": "@Joelndibamwaura/handcraftedhaven12",
   "version": "1.0.0",
-  "description": "Team 12's Group Repo for WDD430 Term 2 2025.",
+  "description": "Handcrafted Haven - Group Project for WDD 430 Team 12, Term 2 2025.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Team 12 - BYU-Idaho WDD430",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Xjomwnd2/HandcraftedHaven12.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }
