@@ -1,0 +1,11 @@
+{
+  "name": "handcraftedhaven12",
+  "version": "1.0.0",
+  "description": "Team 12's Group Repo for WDD430 Term 2 2025.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
