@@ -166,13 +166,13 @@ export default function ProfilesPage() {
         type="text" 
         placeholder="Search profiles..." 
         value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value)}
+        onChange={handleSearchChange}
       />
       
       {/* Department Filter */}
       <select 
         value={selectedDepartment} 
-        onChange={e => setSelectedDepartment(e.target.value)}
+        onChange={handleDepartmentChange}
       >
         <option value="all">All Departments</option>
         {departments.map((department, index) => (
