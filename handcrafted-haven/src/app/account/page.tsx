@@ -54,7 +54,7 @@ export default function AccountPage() {
     });
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const email = formData.get('email') as string;
