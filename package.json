@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build": "echo \"No build step required\"",
+    "vercel-build": "echo \"Build completed\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Team 12 - BYU-Idaho WDD430",
@@ -13,6 +15,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Xjomwnd2/HandcraftedHaven12.git"
+  },
+  "engines": {
+    "node": ">=18.x"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
