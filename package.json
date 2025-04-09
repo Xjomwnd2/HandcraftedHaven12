@@ -4,6 +4,8 @@
   "description": "Handcrafted Haven - Group Project for WDD 430 Team 12, Term 2 2025.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Team 12 - BYU-Idaho WDD430",
@@ -17,5 +19,8 @@
   },
   "dependencies": {
     "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
   }
 }
