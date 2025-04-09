@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { User, Settings, ShoppingBag, Heart, LogOut } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { User, Settings, ShoppingBag, Heart, LogOut, Camera, X } from 'lucide-react';
 import Link from 'next/link';
 
 // Types
@@ -25,6 +25,9 @@ export default function AccountPage() {
     name: '',
     email: ''
   });
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Simulate fetching user data
@@ -55,22 +58,87 @@ export default function AccountPage() {
     }));
   };
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      
+      // Check if the file is an image
+      if (!file.type.startsWith('image/')) {
+        setSaveMessage({
+          type: 'error',
+          text: 'Please select an image file (JPG, PNG, etc.)'
+        });
+        return;
+      }
+      
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setSaveMessage({
+          type: 'error',
+          text: 'Image size should be less than 5MB'
+        });
+        return;
+      }
+      
+      setSelectedImage(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerImageUpload = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const removeSelectedImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     setSaveMessage(null);
     
     try {
-      // Simulate API call to update user profile
-      // Replace with actual API call to your backend
+      // Simulate API call to update user profile and upload image
+      // Replace with actual API calls to your backend
       await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Image upload logic would go here
+      // For example:
+      /*
+      if (selectedImage) {
+        const formData = new FormData();
+        formData.append('profileImage', selectedImage);
+        const response = await fetch('/api/upload-profile-image', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await response.json();
+        // Use the returned image URL
+        const imageUrl = data.imageUrl;
+      }
+      */
       
       // Update local user state with form data
       if (user) {
         setUser({
           ...user,
           name: formData.name,
-          email: formData.email
+          email: formData.email,
+          // In a real implementation, you'd use the imageUrl from the server
+          profileImage: imagePreview || user.profileImage
         });
       }
       
@@ -130,17 +198,26 @@ export default function AccountPage() {
         {/* Sidebar */}
         <div className="w-full md:w-64 bg-white rounded-lg shadow-md p-6">
           <div className="flex flex-col items-center mb-6">
-            {user.profileImage ? (
-              <img 
-                src={user.profileImage} 
-                alt={user.name} 
-                className="w-24 h-24 rounded-full mb-3"
-              />
-            ) : (
-              <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center mb-3">
-                <User size={36} className="text-gray-500" />
-              </div>
-            )}
+            <div className="relative mb-3">
+              {imagePreview || user.profileImage ? (
+                <img 
+                  src={imagePreview || user.profileImage} 
+                  alt={user.name} 
+                  className="w-24 h-24 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                  <User size={36} className="text-gray-500" />
+                </div>
+              )}
+              <button 
+                onClick={triggerImageUpload}
+                className="absolute bottom-0 right-0 p-1 bg-indigo-600 text-white rounded-full"
+                aria-label="Change profile picture"
+              >
+                <Camera size={16} />
+              </button>
+            </div>
             <h2 className="text-xl font-semibold">{user.name}</h2>
             <p className="text-sm text-gray-500">Member since {formatDate(user.joinedDate)}</p>
           </div>
@@ -202,6 +279,59 @@ export default function AccountPage() {
               <h2 className="text-2xl font-semibold mb-6">Profile Information</h2>
               
               <form onSubmit={handleSaveChanges} className="space-y-4">
+                {/* Hidden file input */}
+                <input 
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleImageSelect}
+                  accept="image/*"
+                  className="hidden"
+                />
+                
+                {/* Profile Image Section */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">Profile Image</label>
+                  <div className="flex items-center space-x-4">
+                    <div className="relative w-24 h-24">
+                      {imagePreview || user.profileImage ? (
+                        <img 
+                          src={imagePreview || user.profileImage} 
+                          alt="Profile preview" 
+                          className="w-24 h-24 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                          <User size={36} className="text-gray-500" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex flex-col space-y-2">
+                      <button 
+                        type="button"
+                        onClick={triggerImageUpload}
+                        className="px-3 py-1 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 transition-colors"
+                      >
+                        Upload New Image
+                      </button>
+                      
+                      {imagePreview && (
+                        <button 
+                          type="button" 
+                          onClick={removeSelectedImage}
+                          className="px-3 py-1 bg-red-50 text-red-600 text-sm rounded-md hover:bg-red-100 transition-colors flex items-center justify-center"
+                        >
+                          <X size={14} className="mr-1" /> Remove
+                        </button>
+                      )}
+                      
+                      <p className="text-xs text-gray-500">
+                        JPG, PNG, or GIF. Max 5MB.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                   <input 
