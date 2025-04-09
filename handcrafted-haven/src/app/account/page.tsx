@@ -1,7 +1,6 @@
 // app/account/page.tsx
 "use client";
-
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 export default function AccountPage() {
