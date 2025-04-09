@@ -1,4 +1,3 @@
-// app/profiles/page.tsx
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -135,4 +134,73 @@ export default function ProfilesPage() {
     fetchProfiles();
   }, []);
 
-  useEffect(()
+  useEffect(() => {
+    const filterProfiles = () => {
+      let filtered = profiles;
+
+      // Filter by search query
+      if (searchQuery) {
+        filtered = filtered.filter(profile => 
+          profile.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          profile.bio.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
+      // Filter by selected department
+      if (selectedDepartment !== 'all') {
+        filtered = filtered.filter(profile => profile.department === selectedDepartment);
+      }
+
+      setFilteredProfiles(filtered);
+    };
+
+    filterProfiles();
+  }, [searchQuery, selectedDepartment, profiles]);
+
+  return (
+    <div>
+      <h1>Profiles</h1>
+      
+      {/* Search */}
+      <input 
+        type="text" 
+        placeholder="Search profiles..." 
+        value={searchQuery}
+        onChange={e => setSearchQuery(e.target.value)}
+      />
+      
+      {/* Department Filter */}
+      <select 
+        value={selectedDepartment} 
+        onChange={e => setSelectedDepartment(e.target.value)}
+      >
+        <option value="all">All Departments</option>
+        {departments.map((department, index) => (
+          <option key={index} value={department}>
+            {department}
+          </option>
+        ))}
+      </select>
+      
+      {/* Profiles List */}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <ul>
+          {filteredProfiles.map(profile => (
+            <li key={profile.id}>
+              <Link href={`/profiles/${profile.id}`}>
+                <div>
+                  <img src={profile.avatar} alt={profile.name} width="50" height="50" />
+                  <h3>{profile.name}</h3>
+                  <p>{profile.role}</p>
+                  <p>{profile.department}</p>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
