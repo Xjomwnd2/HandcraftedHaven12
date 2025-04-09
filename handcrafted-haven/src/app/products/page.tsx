@@ -93,6 +93,31 @@ export default function ProductsPage() {
             description: "Monitor your activity levels and improve your health.",
             image: "/tracker.jpg"
           },
+           // New Ceramic Products
+        {
+          id: 9,
+          name: "Ceramic Cup",
+          price: 15.99,
+          category: "Ceramics",
+          description: "A beautifully crafted ceramic cup for your morning coffee.",
+          image: "/ceramic-cup.jpg"
+        },
+        {
+          id: 10,
+          name: "Ceramic Plate",
+          price: 25.99,
+          category: "Ceramics",
+          description: "Elegant ceramic plate for dining and display.",
+          image: "/ceramic-plate.jpg"
+        },
+        {
+          id: 11,
+          name: "Ceramic Pot",
+          price: 35.99,
+          category: "Ceramics",
+          description: "Handmade ceramic pot for your home or garden.",
+          image: "/ceramic-pot.jpg"
+        }
         ];
         
         setProducts(dummyProducts);
