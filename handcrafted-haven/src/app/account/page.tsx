@@ -19,21 +19,79 @@ export default function AccountPage() {
   const [activeTab, setActiveTab] = useState<AccountTab>('profile');
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: ''
+  });
 
   useEffect(() => {
     // Simulate fetching user data
     // Replace with actual API call to your backend
     setTimeout(() => {
-      setUser({
+      const userData = {
         id: 'usr_12345',
-        name: 'Jane Smith',
-        email: 'jane.smith@example.com',
+        name: 'Joel Ndiba Mwaura',
+        email: 'joel.mwaura@example.com',
         profileImage: '/api/placeholder/150/150',
         joinedDate: new Date().toISOString(),
+      };
+      
+      setUser(userData);
+      setFormData({
+        name: userData.name,
+        email: userData.email
       });
       setIsLoading(false);
     }, 1000);
   }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSaveChanges = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+    setSaveMessage(null);
+    
+    try {
+      // Simulate API call to update user profile
+      // Replace with actual API call to your backend
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Update local user state with form data
+      if (user) {
+        setUser({
+          ...user,
+          name: formData.name,
+          email: formData.email
+        });
+      }
+      
+      setSaveMessage({
+        type: 'success',
+        text: 'Changes saved successfully!'
+      });
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSaveMessage(null);
+      }, 3000);
+    } catch (error) {
+      setSaveMessage({
+        type: 'error',
+        text: 'Failed to save changes. Please try again.'
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const formatDate = (dateString: string): string => {
     return new Date(dateString).toLocaleDateString('en-US', { 
@@ -143,33 +201,55 @@ export default function AccountPage() {
             <div>
               <h2 className="text-2xl font-semibold mb-6">Profile Information</h2>
               
-              <div className="space-y-4">
+              <form onSubmit={handleSaveChanges} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                   <input 
                     type="text" 
-                    value={user.name}
-                    onChange={(e) => setUser({...user, name: e.target.value})}
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded-md"
+                    required
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                   <input 
                     type="email" 
-                    value={user.email}
-                    onChange={(e) => setUser({...user, email: e.target.value})}
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded-md"
+                    required
                   />
                 </div>
                 
+                {saveMessage && (
+                  <div className={`p-3 rounded-md ${
+                    saveMessage.type === 'success' 
+                      ? 'bg-green-50 text-green-800' 
+                      : 'bg-red-50 text-red-800'
+                  }`}>
+                    {saveMessage.text}
+                  </div>
+                )}
+                
                 <div className="pt-4">
-                  <button className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
-                    Save Changes
+                  <button 
+                    type="submit"
+                    disabled={isSaving}
+                    className={`px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors ${
+                      isSaving ? 'opacity-70 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    {isSaving ? 'Saving...' : 'Save Changes'}
                   </button>
                 </div>
-              </div>
+              </form>
             </div>
           )}
           
