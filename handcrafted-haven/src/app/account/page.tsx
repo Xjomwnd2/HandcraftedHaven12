@@ -22,7 +22,7 @@ export default function AccountPage() {
         
         if (isLoggedIn) {
           setUser({
-            name: localStorage.getItem('userName') || 'Joel Ndiba Mwaura',
+            name: localStorage.getItem('userName') || 'John Doe',
             email: localStorage.getItem('userEmail') || 'john.doe@example.com',
             isLoading: false,
             isAuthenticated: true
