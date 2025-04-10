@@ -4,10 +4,10 @@
   "description": "Handcrafted Haven - Group Project for WDD 430 Team 12, Term 2 2025.",
   "main": "index.js",
   "scripts": {
-    "start": "next start",       // Start production build
-    "dev": "next dev",           // Start the development server
-    "build": "next build",       // Build the project for production
-    "vercel-build": "next build",// Vercel specific build command
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "build": "echo \"No build step required\"",
+    "vercel-build": "echo \"Build completed\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Team 12 - BYU-Idaho WDD430",
@@ -23,9 +23,9 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
-    "express": "^5.1.0" // If you're using Express as a custom server, you'll need this.
+    "express": "^5.1.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9" // Optional, only if you're using nodemon with a custom server.
+    "nodemon": "^3.1.9"
   }
 }
